@@ -1,0 +1,27 @@
+\section{Introduction}
+A priority queue is a popular data structure used for various applications such as routing, anomaly prioritization, shortest path search, and scheduling~\cite{ah1,ah2,ah3}.
+It is a data structure in which (1) each element has a priority, and (2) a dequeue operation removes and returns the highest priority element from the queue.
+%The concept is a basic component for scheduling used in most routers and event-driven simulators \cite{hw1,fpga1}.
+
+There are several hardware-based implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements.
+The {\it Systolic Arrays} and {\it Shift Registers} based approaches \cite{hw8,hw9}, for example, are not scalable and require $O(n)$ comparators for $n$ nodes.
+FPGA-based pipelined heap, presented by Ioannou {\it et. al} \cite{fpga1}, is scalable and can run for 64K nodes, but it stalls parallel {\it insert-delete} operations. Calendar queues \cite{hw1} incur significant hardware cost when supporting a large priority set. A hybrid priority queue architecture proposed by \cite{hwsw1} operates on $O(log \ n)$ time.
+
+Moreover, all of the existing works do not address {\it holes} created as a result of parallel {\it min-delete} operations followed by {\it insert} operations.
+Since holes occupy storage elements but do not have valid data, retaining holes introduces additional overhead.
+Holes also lead to an unbalanced tree, which may result in longer response time.
+
+Toward this end, this paper proposes an efficient hardware implementation of a parallel priority queue.
+The contributions of this paper are summarized as follows:
+\begin{itemize}
+\item {\bf Hole minimization:} The proposed approach minimizes holes created by parallel operations on a priority queue. Our hole minimization technique reduces hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 4.48\%.
+\item {\bf Hardware sharing:} Sharing hardware between two consecutive pipelined levels reduces the hardware cost. The hardware sharing technique contributes a 3.70\% cost reduction.
+\item {\bf Replacement operation:} Upon detection of a min-delete operation immediately followed by an insert operation, a {\it replacement} operation substitutes these two operations. This method reduces average response time by 30.36\%.
+\end{itemize}
+
+The rest of this paper is organized as follows: Section II contains an overview of literature related to this work.
+Section III presents our proposed design with hole minimization.
+We also propose several optimization techniques for performance efficiency and hardware minimization.
+Section IV describes the implementation results along with performance comparisons with existing designs.
+Section V concludes the paper and identifies some directions for future research.
+

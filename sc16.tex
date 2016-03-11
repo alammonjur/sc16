@@ -1,0 +1,44 @@
+\documentclass[10pt,preprint,conference]{IEEEtran}
+
+% conference specific style
+%\usepackage[11pt,nocopyright]{sigmin}
+\usepackage[square,comma,numbers,sort&compress]{natbib}
+\usepackage{comment}
+\usepackage[hyphens]{url}
+
+\usepackage{algorithm}
+%\usepackage{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{comment}
+
+% common packages
+\include{pkgs}
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+% name your project
+\newcommand{\sys}{\mbox{\textsc{Lams}}\xspace}
+\newcommand{\tagger}{\mbox{\textsc{DfiTagger}}\xspace}
+\input{cmds}
+
+\begin{document}
+
+\input{title}
+\date{}
+\maketitle
+
+\input{abstract}
+\input{intro}
+\input{background}
+\input{impl}
+\input{eval}
+\input{cons}
+
+
+%\bibliographystyle{abbrvnat}
+\bibliographystyle{abbrv}
+\footnotesize
+\setlength{\bibsep}{3pt}
+\bibliography{sc16}
+\end{document}

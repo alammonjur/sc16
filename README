@@ -1,0 +1,55 @@
+die: a paper template
+=====================
+
+## start
+0. Prerequisites
+  - Python 3.x
+
+  - pygmentize
+
+    $ pip install Pygments 
+
+
+1. build it:
+
+    $ make
+    p.pdf built
+    
+    (check p.pdf)
+
+3. starting point, sc16.tex:
+
+    $ grep -oP 'input{\K\w+' sc16.tex
+    
+    title
+    abstract
+    introi
+    background
+    empl
+    eval
+    conclusion
+    
+
+  - title: includes title/author info
+ 
+4. clean-slate template
+
+    $ make init
+
+5. formatting rules (dependencies)
+
+  - code/*.{c,cc,py,js ...} -> code/*.tex
+  - fig/*.svg               -> fig/*.pdf
+  - data/*.gp               -> fig/*.tex
+
+  
+## tools
+
+1. highlight changes, since the last submit
+
+    $ make diff DIFF=HEAD@{}
+
+2. spell check
+
+    $ make spell
+
