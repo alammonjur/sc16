@@ -8,6 +8,8 @@
 
 %\linespread{1.2}
 
+\fvset{fontsize=\scriptsize,xleftmargin=8pt,numbers=left,numbersep=5pt}
+
 \input{code/fmt}
 \newcommand{\figrule}{\hrule width \hsize height .33pt}
 \newcommand{\coderule}{\vspace{-0.4em}\figrule}
@@ -19,6 +21,8 @@
 \setlength{\jot}{0pt}
 
 \def\Snospace~{\S{}}
+\renewcommand*\sectionautorefname{\Snospace}
+\def\sectionautorefname{\Snospace}
 \def\subsectionautorefname{\Snospace}
 \def\subsubsectionautorefname{\Snospace}
 \def\chapterautorefname{\Snospace}
@@ -76,6 +80,7 @@
 \input{glyphtounicode}
 \pdfgentounicode=1
 
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}p{#1}}
 
 % include macros
 \newcommand{\includepdf}[1]{

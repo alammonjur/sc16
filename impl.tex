@@ -1,4 +1,6 @@
 \section{Efficient Parallel Heap Implementation}
+\label{s:impl}
+
 Like an array representation, a heap can be represented by hardware registers or FPGA latches.
 An array of latches can virtually represent each level of a heap.
 The number of latches at each level can be represented as $2^{\beta_k-1}$, where $\beta_k$ is the $k^{th}$ level, assuming that root is in level $1$.
