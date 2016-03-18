@@ -3,13 +3,14 @@ A priority queue is a popular data structure used for various applications such 
 It is a data structure in which (1) each element has a priority, and (2) a dequeue operation removes and returns the highest priority element from the queue.
 %The concept is a basic component for scheduling used in most routers and event-driven simulators \cite{hw1,fpga1}.
 
-There are several hardware-based implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements.
+A parallel heap is expected to offer higher throughput and quality of service than its serial counterpart.
+There are several hardware-based parallel implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements, though they have individual drawbacks.
 The {\it Systolic Arrays} and {\it Shift Registers} based approaches \cite{hw8,hw9}, for example, are not scalable and require $O(n)$ comparators for $n$ nodes.
 FPGA-based pipelined heap, presented by Ioannou {\it et. al} \cite{fpga1}, is scalable and can run for 64K nodes, but it stalls parallel {\it insert-delete} operations. Calendar queues \cite{hw1} incur significant hardware cost when supporting a large priority set. A hybrid priority queue architecture proposed by \cite{hwsw1} operates on $O(log \ n)$ time.
 
-Moreover, all of the existing works do not address {\it holes} created as a result of parallel {\it min-delete} operations followed by {\it insert} operations.
-Since holes occupy storage elements but do not have valid data, retaining holes introduces additional overhead.
-Holes also lead to an unbalanced tree, which may result in longer response time.
+All of the existing works, however, share a common drawback: they do not address {\it holes} created as a result of {\it insert} operations in parallel of {\it min-delete} operations. 
+Holes occupy storage elements as nodes but do not have valid data, so retaining holes introduces additional overhead.
+They also lead to an unbalanced tree, which may result in longer response time.
 
 Toward this end, this paper proposes an efficient hardware implementation of a parallel priority queue.
 The contributions of this paper are summarized as follows:

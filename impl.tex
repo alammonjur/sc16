@@ -20,7 +20,7 @@ In this example, the root node is stored in $L_1$; two elements are stored in th
       \caption{Insert path}
     \label{fig6}
 \end{figure}
-
+f
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=6.5cm]{fig/7.png}
@@ -101,7 +101,9 @@ Figure \ref{fig9} illustrates this situation.
 Let us assume that an insert operation comes at time $t_i$ and a min-delete operation comes at $t_j$, where $i, j = 1,2,3, \cdots$ and $j>i$.
 All operations take one clock cycle at any level to complete their respective tasks at that level.
 Only a single node, if any, gets modified for all levels.
-In general, any insert-delete combination will create a hole if $(t_j - t_i) < \beta\tau$, where $\beta$ is the depth of the heap and $\tau$ is the cycle time per level.
+In general, any insert-delete combination will create a hole if $(t_j - t_i) < \beta\tau$, where $\beta$ is the depth of the heap and $\tau$ is the cycle time per level. $\beta - 1$ holes can be created in a $\beta$-level heap at most in an {\it insert} followed by consecutive {\it min-deletes}. In the worst case scenario, $\beta_max - 1$ holes during the propagation of an {\it insert}, where $\beta_max$ is the maximum depth of the heap. 
+
+\subsection {Handling Holes}
 
 The naive approach to avoid a hole from an insert-delete combination is to stall {\it min-delete} from entering the pipeline until {\it insert} completes.
 After insertion completes, the last element will update to the newly filled node.
@@ -112,9 +114,11 @@ In the worst-case scenario, where a binary heap of many levels encounters a sequ
 
 To solve the first issue, we propose a hole minimization technique.
 With this technique, the holes are removed while an insert operation is processed.
-We check for the existence of a hole by checking a special-purpose register, and if one exists, we fill it with the new element.
+We check for the existence of a hole by checking special-purpose registers, which each stores the location of a hole. 
+If a hole exists, we fill it with the new element. 
 We apply the insert algorithm, except we modify it so that the data will be inserted at the position of a hole instead of the last available node.
 In the case of multiple holes, we fill the last hole with inserted data for implementation ease.
+Since $\beta_max - 1$ holes can created at most during the propagation of an {\it insert}, $\beta - 1$ registers are required.
 Details of this algorithm are described in the next subsection.
 
 To address the second issue, we intentionally avoid the root replacement by the last element.
