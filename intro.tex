@@ -3,16 +3,16 @@ A priority queue is a popular data structure used for various applications such 
 It is a data structure in which (1) each element has a priority, and (2) a dequeue operation removes and returns the highest priority element from the queue.
 %The concept is a basic component for scheduling used in most routers and event-driven simulators \cite{hw1,fpga1}.
 
-A parallel heap is expected to offer higher throughput and quality of service than its serial counterpart.
-There are several hardware-based parallel implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements, though they have individual drawbacks.
+There are several parallel implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements, though they have individual drawbacks.
 The {\it Systolic Arrays} and {\it Shift Registers} based approaches \cite{hw8,hw9}, for example, are not scalable and require $O(n)$ comparators for $n$ nodes.
-FPGA-based pipelined heap, presented by Ioannou {\it et. al} \cite{fpga1}, is scalable and can run for 64K nodes, but it stalls parallel {\it insert-delete} operations. Calendar queues \cite{hw1} incur significant hardware cost when supporting a large priority set. A hybrid priority queue architecture proposed by \cite{hwsw1} operates on $O(log \ n)$ time.
+FPGA-based pipelined heap, presented by Ioannou {\it et. al} \cite{fpga1}, is scalable and can run for 64K nodes, but it stalls parallel insert-delete operations. Calendar queues \cite{hw1} incur significant hardware cost when supporting a large priority set. A hybrid priority queue architecture proposed by \cite{hwsw1} operates on $O(log \ n)$ time.
 
-All of the existing works, however, share a common drawback: they do not address {\it holes} created as a result of {\it insert} operations in parallel of {\it min-delete} operations. 
-Holes occupy storage elements as nodes but do not have valid data, so retaining holes introduces additional overhead.
-They also lead to an unbalanced tree, which may result in longer response time.
+All of the existing works on hardware-based parallel priority queues, however, share a common problem: they do not address {\it holes} created as a result of insert operations in parallel with delete operations. 
+Holes occupy storage elements but do not have valid data. 
+Retaining them not only introduces additional overhead, but it also leads to an unbalanced tree, which may result in longer response time.
+Although holes can be eliminated by rebalancing the tree, doing so requires a non-negligible number of cycles, during which no further insert or delete operations can be processed.
 
-Toward this end, this paper proposes an efficient hardware implementation of a parallel priority queue.
+Toward this end, this paper proposes an efficient, parallel hardware-based implementation.
 The contributions of this paper are summarized as follows:
 \begin{itemize}
 \item {\bf Hole minimization:} The proposed approach minimizes holes created by parallel operations on a priority queue. Our hole minimization technique reduces hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 4.48\%.
@@ -21,8 +21,8 @@ The contributions of this paper are summarized as follows:
 \end{itemize}
 
 The rest of this paper is organized as follows:
-\autoref{s:background} contains an overview of literature related to this work.
-\autoref{s:impl} presents our proposed design with hole minimization. We also propose several optimization techniques for performance efficiency and hardware minimization.
+\autoref{s:background} contains an overview of literature related to this work and discusses holes in parallel implementations in more details.
+\autoref{s:impl} presents our proposed design with hole minimization. 
+We also propose several optimization techniques for performance efficiency and hardware minimization.
 \autoref{s:eval} describes the implementation results along with performance comparisons with existing designs.
 \autoref{s:cons} concludes the paper and identifies some directions for future research.
-

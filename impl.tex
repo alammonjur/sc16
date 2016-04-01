@@ -3,7 +3,7 @@
 
 Like an array representation, a heap can be represented by hardware registers or FPGA latches.
 An array of latches can virtually represent each level of a heap.
-The number of latches at each level can be represented as $2^{\beta_k-1}$, where $\beta_k$ is the $k^{th}$ level, assuming that root is in level $1$.
+The number of latches at each level is $2^{\beta_k-1}$, where $\beta_k$ is the $k^{th}$ level, assuming that root is in level $1$.
 Figure \ref{fig5} shows how latches represent levels.
 In this example, the root node is stored in $L_1$; two elements are stored in the next level, $L_2$; the level after that is $L_3$, storing four elements; and the last level, $L_4$, has three elements, although it can have a maximum of eight.
 
@@ -20,7 +20,7 @@ In this example, the root node is stored in $L_1$; two elements are stored in th
       \caption{Insert path}
     \label{fig6}
 \end{figure}
-f
+
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=6.5cm]{fig/7.png}
@@ -30,13 +30,13 @@ f
 
 \subsection{Insert Operation}
 
-The {\it insert} operation, which is intimated from the last available node of a heap.
+The {\it insert} operation is intimated from the last available node of a heap.
 However, if a bottom-up insertion is done in parallel with other operations such as {\it min-delete}, it may cause an inconsistency in the heap.
 To clarify, let us consider the example in Figure \ref{fig5}.
 Suppose we insert element $3$ into the heap and then immediately delete one element.
 Let us assume nodes at each level get updated in a single clock cycle.
 That means, in the worst case, a total of four clock cycles is required to complete only an insert operation in this situation.
-Before it completes, if a {\it min-delete} comes, that operation has to wait up to four clock cycles to avoid deleting a wrong element from the root (5 in this case).
+Before it completes, if a {\it min-delete} comes, that operation has to wait up to four clock cycles to avoid deleting a wrong element from the root ($5$ in this case).
 Thus, it is incumbent to insert from the root and go down.
 However, we need to know the exact path for the newly inserted element, otherwise the tree will no longer hold the conditions of a complete binary tree.
 We adopt an algorithm presented by Vipin {\it et. al} \cite{pq6} in our design. The algorithm is as follows:
@@ -57,8 +57,7 @@ Starting from root, the path should be $root \rightarrow left \rightarrow right 
 
 \subsection{Min-Delete Operation}
 
-There is one conventional approach to delete an element from a heap.
-Since a min element resides at the root, deletion always happens from the root, and the last element of the heap replaces the root.
+One conventional approach for deleting an element from a heap is to delete from the root and replace it with the last element.
 There are two difficulties here:
 
 \begin{enumerate}
@@ -66,44 +65,28 @@ There are two difficulties here:
 \item Replacing the root with the last element of the heap requires an additional clock cycle to write that element into the root node. Additionally, we need to compare three elements: root and its two children, or any node and its children. From a hardware perspective, it is cost-efficient to compare two elements rather than three. Moreover, 3-element comparisons cause a longer path delay.
 \end{enumerate}
 
-
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=6.5cm]{fig/8.png}
-      \caption{A hole results from parallel operation of insert-delete}
-    \label{fig8}
-\end{figure}
-
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=6.5cm]{fig/9.png}
-      \caption{Container of latches ($L$) after parallel operation of insert-delete}
-    \label{fig9}
+  \includegraphics[width=6.5cm]{fig/normal-insert-delete-latches.png}
+      \caption{Container of latches $L$ after parallel {\it insert-delete}.}
+    \label{hole-latches}
 \end{figure}
 
 \begin{figure*}[!ht]
   \centering
   \includegraphics[width=9.5cm]{fig/2.png}
-      \caption{Top Level Architecture of insert-delete}
+      \caption{Top Level Architecture of {\it insert-delete}}
     \label{fig10}
 \end{figure*}
 
-Figure \ref{fig8} illustrates the first issue clearly.
-Here, an insert-delete combination is performed on the heap from Figure \ref{fig7}.
-At time $t_1$, the insert operation with element $100$, denoted by $insert(100)$, is encountered.
-The element will be inserted at the last node of the last level, which is at index $12$.
-After one clock cycle of {\it insert}, {\it min-delete} is encountered at $t_2$.
-But, at that time, $insert(100)$ is being processed at level $L_2$, so the last element is still the $11^{th}$ node.
-The min-delete operation will create a hole at the $11^{th}$ node, as shown in Figure \ref{fig8}.
-Eventually, when $insert(100)$ finishes, element $100$ will occupy at the position of $H[12]$, but $H[11]$ will become empty.
-Figure \ref{fig9} illustrates this situation.
+We already show the first issue in the previous section, when we delete on the next cycle after inserting $100$. 
+Figure \ref{hole-latches} illustrates the result from the earlier example again, with the addition of latches.
 
-Let us assume that an insert operation comes at time $t_i$ and a min-delete operation comes at $t_j$, where $i, j = 1,2,3, \cdots$ and $j>i$.
+For the general case, let us assume that an insert operation comes at time $t_i$ and a min-delete operation comes at $t_j$, where $i, j = 1,2,3, \cdots$ and $j>i$.
 All operations take one clock cycle at any level to complete their respective tasks at that level.
 Only a single node, if any, gets modified for all levels.
-In general, any insert-delete combination will create a hole if $(t_j - t_i) < \beta\tau$, where $\beta$ is the depth of the heap and $\tau$ is the cycle time per level. $\beta - 1$ holes can be created in a $\beta$-level heap at most in an {\it insert} followed by consecutive {\it min-deletes}. In the worst case scenario, $\beta_max - 1$ holes during the propagation of an {\it insert}, where $\beta_max$ is the maximum depth of the heap. 
-
-\subsection {Handling Holes}
+Any insert-delete combination will create a hole if $(t_j - t_i) < \beta\tau$, where $\beta$ is the current depth of the heap and $\tau$ is the cycle time per level. 
+$\beta - 1$ holes can be created in a $\beta$-level heap at most in an {\it insert} followed by consecutive {\it min-deletes}. In the worst case scenario, $\beta_{k_{max}} - 1$ holes during the propagation of an {\it insert}, where $\beta_{k_{max}}$ is the maximum possible depth of the heap. 
 
 The naive approach to avoid a hole from an insert-delete combination is to stall {\it min-delete} from entering the pipeline until {\it insert} completes.
 After insertion completes, the last element will update to the newly filled node.
@@ -118,13 +101,15 @@ We check for the existence of a hole by checking special-purpose registers, whic
 If a hole exists, we fill it with the new element. 
 We apply the insert algorithm, except we modify it so that the data will be inserted at the position of a hole instead of the last available node.
 In the case of multiple holes, we fill the last hole with inserted data for implementation ease.
-Since $\beta_max - 1$ holes can created at most during the propagation of an {\it insert}, $\beta - 1$ registers are required.
+Since $\beta_{k_{max}} - 1$ holes can created at most during the propagation of an {\it insert}, $\beta_{k_{max}} - 1$ registers are required.
 Details of this algorithm are described in the next subsection.
 
 To address the second issue, we intentionally avoid the root replacement by the last element.
 We delete root first and keep it as it is.
 Then, we fill the root with its least child and follow the min-delete algorithm described in the previous section.
 This way, we can save one cycle and minimize the path delay.
+Because this method does not guarantee that the last node to be empty, it creates a hole for any {\it min-delete} regardless whether the operation follows an {\it insert}. 
+However, we can still remove the holes using the same hole minimization technique.
 
 \subsection{Insert-Delete Logic Implementation}
 
@@ -347,7 +332,7 @@ In general, for any given time $t$, the level $L_i$ cannot be completed if level
 In this situation, we can share hardware between the levels $L_i$ and $L_{i+1}$, as shown in Figure \ref{d3}.
 
 \subsubsection{Replacement Technique}
- There are four possible sequences of operations: {\it Insert-Only} ($I$), {\it Delete-Only} ($D$), {\it Insert-Delete} ($ID$) and {\it Delete-Insert} ($DI$).
+There are four possible sequences of operations: {\it Insert-Only} ($I$), {\it Delete-Only} ($D$), {\it Insert-Delete} ($ID$) and {\it Delete-Insert} ($DI$).
 The {\it Insert-Only} sequences ($I \ I \ \cdots I $) take single clock cycle to operate at each stage.
 While our insert-delete logic minimizes holes created from $IDID \cdots DIDI \cdots$ sequences, we can optimize for scenarios where the insert or delete request immediately follows after the cycle where the other is encountered.
 Here, we introduce a {\it replacement} operation that does not cause holes.
@@ -361,3 +346,11 @@ The algorithm of this operation is as follows:
 The time complexity for these sequences is exactly the same as for {\it Insert-Only} where no holes are generated.
 Our replacement operation is ignored if the second request occurs more than one cycle after the first.
 Thus, this optimization can work in parallel with our hole minimization technique.
+
+\subsection{Case Studies}
+\subsubsection{Worst Case Scenario}
+To fill any possible number of holes, $2^{\beta_{max}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{max}-1}$ nodes. 
+However, dedicating this many registers to address the worst case scenario wastes hardware storage, which is the very problem we are minimizing. 
+We believe that $\beta_{max}$ registers is enough to handle the average scenario. 
+Although this amount cannot prevent all holes from being removed in all scenarios, it still saves hardware resources compared to other parallel hardware implementations. 
+As with other implementations, the presence of holes in our heap doesn't invalidate the correctness of the heap itself.

@@ -11,10 +11,8 @@
 A priority queue is a data structure that maintains a collection of elements using the following set of operations by a minimum priority queue $Q$:
 \begin{itemize}
 \item {\bf Insert:} Insert a number into $Q$, provided that the new list should maintain the priority queue.
-
-\item {\bf Min-delete:} Find the minimum number in $Q$ and delete it from $Q$. After deletion, the property of priority queue should be kept unchanged.
+\item {\bf Min-Delete:} Find the minimum number in $Q$ and delete it from $Q$. After deletion, the property of priority queue should be kept unchanged.
 \end{itemize}
-
 
 %\subsubsection{Priority Queue Implementation}
 A priority queue can be implemented by using a binary heap data structure.
@@ -30,38 +28,38 @@ leftChild[i] &=& 2i\\
 rightChild[i] &=& 2i + 1
 \end{eqnarray*}
 
-The {\it insert} algorithm on the binary min heap $H$ is as follows:
+The insert algorithm on the binary min heap $H$ is as follows:
 \begin{enumerate}
-\item Place the new element in the next available position e.g. $i$ in $H$.
+\item Place the new element in the next available position i.e. $i$ in $H$.
 \item Compare the new element, $H[i]$, with its parent, $H[i/2]$. If $H[i]$ $<$ $H[i/2]$, then swap their values.
 \item Continue this process until either the new element's parent is smaller than or equal to the new element, or the new element reaches the root, $H[1]$.
 \end{enumerate}
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=4cm]{fig/fig3.png}
+  \includegraphics[width=4cm]{fig/normal-insert.png}
       \caption{New heap structure after inserting $18$.}
-    \label{fig3}
+    \label{normal-insert}
 \end{figure}
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=4cm]{fig/fig4.png}
-      \caption{New heap structure after a delete operation from the original heap shown at Figure \ref{fig2}.}
-    \label{fig4}
+  \includegraphics[width=4cm]{fig/normal-delete.png}
+      \caption{New heap structure after a {\it min-delete} in the original heap from Figure \ref{fig2}.}
+    \label{normal-delete}
 \end{figure}
 
-Figure \ref{fig3} shows the new heap structure after inserting $18$ into the original heap from Figure \ref{fig2}.
+Figure \ref{normal-insert} shows the new heap structure after inserting $18$ into the original heap from Figure \ref{fig2}.
 
-The {\it min-delete} algorithm is as follows:
+The min-delete algorithm is as follows:
 \begin{enumerate}
 \item Return root element, $H[1]$.
-\item Replace the root with the last element at the last level e.g. $H[i]$.
+\item Replace the root with the last element at the last level i.e. $H[i]$.
 \item Compare the new root with its children. Unless the root is smaller than its children, swap the root and its min child.
-\item Continue swapping for each level by comparing $H[i]$ with $H[2i]$ and $H[2i+1]$, until the parent becomes less than its children or reaches to the leaf node.
+\item Continue swapping for each level by comparing $H[i]$ with $H[2i]$ and $H[2i+1]$ until the parent becomes less than its children or reaches the leaf node.
 \end{enumerate}
 
-Figure \ref{fig4} depicts the heap structure after a min-delete operation on the original heap shown at Figure \ref{fig2}.
+Figure \ref{normal-delete} depicts the heap structure after a min-delete operation on the original heap shown at Figure \ref{fig2}.
 We can see that $5$ was the previous root element at Figure \ref{fig2}.
 The heap is restructured according to the min-delete algorithm.
 
@@ -79,20 +77,49 @@ The second element is compared and potentially swapped with the (updated) parent
 From this example, a pipelined binary heap can ideally process one operation at each level.
 
 Difficulties arise when processing insert and delete operations in parallel.
-{\it Inserts} and {\it min-deletes}, in normal cases, start at the last and first level of the heap respectively and progress their tasks in opposite directions.
-Moreover, insert-delete combinations can create {\it holes} in the heap. 
+{\it Inserts} and {\it min-deletes} normally start at the last and first level of the heap respectively and progress their tasks in opposite directions.
+Due to the opposite flows of the two types of operations, doing them in parallel may cause an inconsistency in the heap.
+Although the insert algorithm can be modified to operate in the same direction as {\it min-delete}, as we discuss in \autoref{s:impl}, parallel {\it insert-deletes} (a parallel {\it insert-delete} is an {\it insert} immediately followed by a {\it min-delete}) nevertheless can create {\it holes} in the heap. 
 A hole occupies a node in the heap, but it does not contain valid data.
-Though holes unnecessarily increase the depth of the heap, which delays response time for further operations, but the most significant negative impact is that they waste storage resources.
-Existing hardware-based pipelined heaps, to be discussed in related work, do not have any method to refill a hole.
-In the worst-case scenario, shown in Figure \ref{hole}, hardware cost double. 
-We discuss more about parallel insert-delete operations and holes in Section III.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=6.5cm]{fig/normal-insert-delete.png}
+      \caption{A hole is created from parallel insert-delete operation}
+    \label{hole}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=6.5cm]{fig/normal-insert-delete-2.png}
+      \caption{The result of the arallel insert-delete operation}
+    \label{hole-after}
+\end{figure}
+
+Figure \ref{hole} demonstrates how a hole is created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert}.
+At time $t_1$, the insert operation with element $100$, denoted by $insert(100)$, is encountered.
+Again, we discuss the algorithm for top-down insertion later, but we can see that the new element $100$ will be at the last node of the last level, which is at index $12$, in four cycles.
+After one clock cycle of {\it insert}, {\it min-delete} is encountered at $t_2$.
+But, at that time, $insert(100)$ is being processed at the second level, so the last element is still the $11^{th}$ node.
+The min-delete operation will create a hole at the $11^{th}$ node.
+Eventually, when $insert(100)$ finishes, element $100$ will occupy at the position of $H[12]$, but $H[11]$ will become empty.
+Figure \ref{hole-after} illustrates the aftermath.
 
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=4cm]{fig/hole.png}
-      \caption{Worst-case scenario for hole creation.}
-    \label{hole}
+      \caption{Bad case scenario for hole creation.}
+    \label{badcase}
 \end{figure}
+
+Holes unnecessarily increase the depth of the heap, which delays response time for further operations.
+The most significant negative impact, however, is that they waste storage resources.
+In a bad case scenario, shown in Figure \ref{badcase}, hardware cost double.
+
+Of course, in serial priority queues, the possibility of hole creation is nonexistent. 
+The serial queue must process an {\it insert} or {\it min-delete} before beginning the next, so the last node is updated before any {\it min-deletes}.
+
+We discuss more about parallel insert-delete operations and holes in \autoref{s:impl}.
 
 \subsection{Related Work}
 Several authors have theoretically proven that the parallel heap is an efficient data structure for implementing a priority queue.
@@ -127,5 +154,8 @@ The ASIC-based pipelined heap presented by Ioannou {\it et. al} \cite{fpga1} is 
 Kumar {\it et. al} \cite{hwsw1} propose a new hybrid priority queue architecture that can be managed in hardware and/or software.
 The main drawback is that it operates on $O(\log n)$ time.
 
-However, all aforementioned designs never address the {\it holes} created from parallel {\it insert-delete} operations (an insert operation followed by a min-delete operation).
+However, all aforementioned designs never address the {\it holes} created from parallel insert-delete operations.
+
+While our proposed design is similar to \cite{pq6}, the latter a software approach as opposed to hardware. It does not address holes created by parallel insert-delete operations, instead circumventing the issue by using locking.
+
 In the next section, we present our proposed design with hole minimization, including several optimization techniques for performance efficiency and hardware minimization.
