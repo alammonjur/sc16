@@ -368,6 +368,8 @@ We can resolve these holes by using $\beta_{max}$ number of register banks each 
 \subsubsection{Worst Case Scenario}
 To fill any possible number of holes, $2^{\beta_{max}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{max}-1}$ nodes. 
 However, dedicating this many registers to address the worst case scenario wastes hardware storage, which is the very problem we are minimizing. 
-We believe that $\beta_{max}$ registers is enough to handle the average scenario. 
-Although this amount cannot prevent all holes from being removed in all scenarios, it still saves hardware resources compared to other parallel hardware implementations. 
+Moreover, this number is only theoretical.
+For a 32-max-level heap, we believe that 512 registers is enough based on our evaluations using standard benchmark..
+We find that the worst empirical case scenario creates 512 holes while the average case creates 10 to 12 holes.
+In a theoretical event where 512 registers cannot prevent all holes from being removed, our heap still saves hardware resources compared to other parallel hardware implementations of this maximum depth. 
 As with other implementations, the presence of holes in our heap doesn't invalidate the correctness of the heap itself.
