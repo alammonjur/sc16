@@ -92,8 +92,15 @@ A hole occupies a node in the heap, but it does not contain valid data.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=6.5cm]{fig/normal-insert-delete-2.png}
-      \caption{The result of the arallel insert-delete operation}
+      \caption{The result of the parallel insert-delete operation}
     \label{hole-after}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=6.5cm]{fig/normal-insert-delete-2.png}
+      \caption{Inserting $3$ after the parrallel {\it insert-delete}}
+    \label{skiphole}
 \end{figure}
 
 Figure \ref{hole} demonstrates how a hole is created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert}.
@@ -102,8 +109,10 @@ Again, we discuss the algorithm for top-down insertion later, but we can see tha
 After one clock cycle of {\it insert}, {\it min-delete} is encountered at $t_2$.
 But, at that time, $insert(100)$ is being processed at the second level, so the last element is still the $11^{th}$ node.
 The min-delete operation will create a hole at the $11^{th}$ node.
-Eventually, when $insert(100)$ finishes, element $100$ will occupy at the position of $H[12]$, but $H[11]$ will become empty.
-Figure \ref{hole-after} illustrates the aftermath.
+Eventually, when $insert(100)$ finishes, element $100$ will occupy the position of $H[12]$, but $H[11]$ will become empty.
+Figure \ref{hole-after} illustrates the aftermath of the insert-delete operation complete.
+When another {\it insert} is encountered, instead of filling the hole at $H[11]$, the newly inserted element will occupy $H[13]$, as shown in Figure \ref{skiphole}. 
+This is because the last occupied element is $H[12]$, and the pipelined heap typically inserts a new element in the next available node following the last occupied one.
 
 \begin{figure}[!ht]
   \centering
