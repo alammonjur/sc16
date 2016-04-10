@@ -276,10 +276,15 @@ During {\it comp}, the level sends the data and opcode to the next level so that
 
 
 Figure \ref{clock1} illustrates the pipeline flow for a parallel insert operation, broken down to the three tasks.
-Generally, at any level, $L_i$, if {\it read} performs at time $t$, then {\it comp} completes there at $t+1$.
-The comp task generates the next {\it index} to be read by the next level, $L_{i+1}$, which performs {\it read} at $t+1$.
-At $t+2$, $L_i$ performs {\it write}, and $L_{i+1}$ finishes {\it comp}, which generates the index to be read by $L_{i+2}$.
-At $t+3$, $L_i$ can accept a new operation, $L_{i+1}$ performs {\it write}, and $L_{i+2}$ completes {\it comp}, which generates the index for $L_{i+3}$. 
+
+{\bf Cycle $t$:} At any level, $L_i$, suppose {\it read} performs at this clock cycle.
+
+{\bf Cycle $t+1$:} {\it Comp} completes in $L_i$, generating the next {\it index} to be read by the next level, $L_{i+1}$. $L_{i+1}$ performs {\it read} within the same clock cycle.
+
+{\bf Cycle $t+2$:} $L_i$ performs {\it write}. $L_{i+1}$ finishes {\it comp}, which generates the index to be read by $L_{i+2}$.
+
+{\bf CYcle $t+3$:} $L_i$ can accept a new operation. $L_{i+1}$ performs {\it write}. $L_{i+2}$ completes {\it comp}, which generates the index for $L_{i+3}$.
+
 The pattern repeats for subsequent levels until the insert operation finishes.
 Effectively, this results in a {\it write} at each clock cycle after an initial latency of two clock cycles at the first level.
 
