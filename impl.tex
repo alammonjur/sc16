@@ -353,15 +353,35 @@ Thus, this optimization can work in parallel with our hole minimization techniqu
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=7cm]{fig/fillhole.png}
-      \caption{Hole Minimization: there was a hole between 53 and 100. This gets filled up by 41 after inserting 3 into the heap}
+      \caption{Using our hole minimization technique, the hole that exists between $53$ and $100$ in Figure \ref{hole-after} gets filled with 41 after inserting $3$ into the heap.}
     \label{fillhole}
 \end{figure}
-When whole is created, its location is saved into a register. The inserted node goes to that location instead of the last available location. For example, as shown at Fig \ref{hole-latches}, the hole index 10 is stored at hole register. The last available insert node location is 12 in normal implementation. Now, let us insert 3 into the heap. We consider the hole index 10 for constructing the insert path.  This hole is filled by the other element (41 here) during the instert operation as shown at Fig \ref{fillhole}. According to our algorithm, the insert path is $H[0] \rightarrow  H[1] \rightarrow H[4] \rightarrow H[10]$. The naive implementations consider the index 12 for the insert path; as a result their path would be  $H[0] \rightarrow  H[2] \rightarrow H[5] \rightarrow H[12]$, which does not gaurantee the hole minimization.
+When a hole is created, its location is saved into a register. 
+The inserted node goes to that location instead of the last available location. 
+For example, with the heap from Figure \ref{hole-latches}, the hole index $11$ is stored at a hole register. 
+The last available insert node location is index $13$ in the normal implementation. 
+Now, let us insert $3$ into the heap. 
+We consider the hole index $11$ for constructing the insert path. 
+According to our algorithm, the insert path is $H[1] \rightarrow H[2] \rightarrow H[5] \rightarrow H[11]$. 
+This hole is filled by the element $41$ during the insert operation, as shown in Figure \ref{fillhole}. 
+The naive implementations consider the index $13$ for the insert path.
+As a result, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not gaurantee the hole minimization.
 
 \subsubsection{Root Replacement by Last Element}
-Some authors replace the root with the last element at delete operation \cite{hw2,hw3}. It seems that hole will not be created here. But this is not the case. Before the completion of pipeline propagation of delete operation, insert operation will lead to hole. For example, the initial data is as mentioned at Fig \ref{fig7}. Now perform two consecutive operations, insert and delete, no matter in which order. The resultant structure is shown at Fig \ref{hole-latches}. The hole location can be changed based on the data it already has. The hole will not be the outcome for only one situation: if the both insert and delete path end at the last node. They, indeed never touch these issues at all.
+Some authors replace the root with the last element at delete operation \cite{hw2,hw3}. 
+It may seem that a hole will not be created with this approach, but this is not the case. 
+Before the completion of the pipeline propagation of {\it delete}, insert operation will lead to hole. 
+Let our initial heap be the one shown in Figure \ref{fig7}. 
+Now we perform two consecutive operations, {\it insert} and {\it min-delete}, no matter which order. 
+The resulting structure is shown at Figure \ref{hole-latches}. 
+The hole location can be changed based on the data it already has. 
+The hole will not be the outcome for only one situation: if the both insert and delete path end at the last node. 
+THese authors do not address these issues.
 
-It seems that the replacement techniques we used at the previous section may solve this hole problem here. Because, there are no new data to be deleted, only root is replaced by the newly inserted element. But the next delete will be stalled till the completion of the operation of the full pipelined path. Here, the replacement can be apply only when the last location gets its correct element.
+The replacement techniques we use at the previous section may solve this hole problem here. 
+Because there are no new data to be deleted, only root is replaced by the newly inserted element. 
+But the next {\it min-delete} will be stalled until the completion of the operation of the full pipelined path. 
+Here, the replacement can be apply only when the last location gets its correct element.
 
 We can resolve these holes by using $\beta_{max}$ number of register banks each of with $\beta$ bits leangth, where $\beta_{max}$ is the maximum depth of the heap. For example, to simulate $2^{32}$ numbers of nodes, only 32 numbers of registers each having 32-bit leangth is enough. As we mentined, root replacement technique stall the pipeline cycle more and it stronlgly deploy three element comparision at each level of the heap, we avoid root replacement technique. We remove the root at the first cycle and replace the root by the least element of its children at the next cycle. Eventually, the previous of the last level element is replaced by the last level element. I say that whole is creted if the last level element which goes up the previous level is not the last element of the heap. We store this hole location into a register for the use of the next insert instruction. In case of delete followed by insert instruction {\it DI} (if the both instructions are available before the delete starts), this can be considered as replace of root by the insert element rather than root's children.
 
@@ -373,3 +393,6 @@ For a 32-max-level heap, we believe that 512 registers is enough based on our ev
 We find that the worst empirical case scenario creates 512 holes while the average case creates 10 to 12 holes.
 In a theoretical event where 512 registers cannot prevent all holes from being removed, our heap still saves hardware resources compared to other parallel hardware implementations of this maximum depth. 
 As with other implementations, the presence of holes in our heap doesn't invalidate the correctness of the heap itself.
+
+% \subsubsection{Micros}'
+% The insert algorithm in Bhagwan and Lin's pipelined heap \ref{hw2} always fill empty nodes starting from the left going down. For each node, it considers whether an empty node exists in the left child path. If not, it moves to the right child path. In a sense, this 
