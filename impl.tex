@@ -366,7 +366,7 @@ Some authors replace the root with the last element at {\it min-delete} \cite{hw
 As we discuss before, though it may seem that a hole will not be created with this approach, this is not the case. 
 Figure \ref{hole} demonstrates the hole being created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert} using those authors' operations.
 When inserting $100$, the insert path goes through $H[1] \rightarrow H[3] \rightarrow  H[6] \rightarrow  H[12]$. 
-At the time the {\it insert} is being procesed, the {\it min-delete} comes and replaces the root with the element at node $H[11]$, creating a hole at node $H[11]$, as shown at Figure \ref{hole-after}. 
+At the time the {\it insert} is being processed, the {\it min-delete} comes and replaces the root with the element at node $H[11]$, creating a hole at node $H[11]$, as shown at Figure \ref{hole-after}. 
 We consider the node at $H[11]$ as a hole because it does not contain any data when its next neighbor, $H[12]$, does. 
 This situation could be avoided if the root was replaced by $H[12]$.
 However, that requires having {\it min-delete} wait until {\it insert} completes. 
@@ -381,7 +381,7 @@ The last available insert node location would be index $13$ in a naive pipelined
 But instead, we use the hole index $11$ for constructing the insert path. 
 According to our algorithm, the insert path is $H[1] \rightarrow H[2] \rightarrow H[5] \rightarrow H[11]$. 
 This hole is filled by the element $41$ during the insert operation, as shown in Figure \ref{fillhole}. 
-Meanwhile, for the naive implementations, as the index $13$ would be considered for the insert path, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not gaurantee the hole minimization.
+Meanwhile, for the naive implementations, as the index $13$ would be considered for the insert path, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not guarantee the hole minimization.
 
 
 \subsubsection{Worst Case Scenario}
