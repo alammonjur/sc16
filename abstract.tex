@@ -1,13 +1,17 @@
 \begin{abstract}
 A heap can be used as a priority queue implementation for a wide variety of algorithms like routing, anomaly prioritization, shortest path search, and scheduling.
 A parallel implementation of a heap is expected to offer higher throughput and quality of service than a serial implementation.
-Several parallel solutions have been proposed, but they incur significant hardware cost by producing {\it holes} in a heap via parallel {\it insert-delete} operations. Holes result in an unbalanced, incomplete binary heap, which leads to longer response time.
-In this paper, we propose a hardware realization of a pipelined binary heap.
-Our proposed technique makes three key contributions.
-(1) We provide a {\it hole} minimization technique that forces the tree structure to be a complete binary heap.
+Several parallel solutions have been proposed, but they incur significant hardware cost by producing {\it holes} in a heap via parallel {\it insert-delete} operations. Holes result in an unbalanced, incomplete binary heap, which leads to longer response time, and they also waste hardware resources.
+
+In this paper, we demonstrate the significant consequences of holes in terms of hardware and response time.
+We propose a FPGA realization of a pipelined binary heap that addresses holes. 
+Our primary proposed technique, a hole minimization technique, forces the tree structure to be a complete binary heap.
 This technique reduces the hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 14.48\%.
 It allows the proposed design to take $O(1)$ time for {\it min-delete} and {\it insert} operations by ensuring minimum wait time between two consecutive operations.
-(2) Sharing hardware between two consecutive pipelined levels reduces hardware cost even further by 7.70\%.
-(3) We introduce a {\it replacement} operation, which reduces the response time by 30.36\%.
-As a result, the proposed technique incurs 78.50\% less overhead while achieving similar performance compared to existing techniques.
+
+Our proposed heap makes two other contributions. 
+(1) Sharing hardware between two consecutive pipelined levels reduces hardware cost even further by 7.70\%.
+(2) We introduce a {\it replacement} operation, which reduces the response time by 30.36\%.
+
+As a result, the proposed heap incurs 78.50\% less overhead while achieving similar performance compared to existing techniques.
 \end{abstract}
