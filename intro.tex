@@ -3,9 +3,11 @@ A priority queue is a popular data structure used for various applications such 
 It is a data structure in which (1) each element has a priority, and (2) a dequeue operation removes and returns the highest priority element from the queue.
 %The concept is a basic component for scheduling used in most routers and event-driven simulators \cite{hw1,fpga1}.
 
-The concurrent priority queue proposed by Vipin {\it et. al}~\cite{pq6} lead a new direction of heap processing in parallel ways. It shows how insert and delete operation can be processed from the root node, in particular, the authors formulate the insertion path from the root to the last node. Although, the paper does not show fine-gained cycle operation during the concurrent process, instead it theoritically shows the complexity of concurrent heap processing by circumventing locking meachnishm at system level implementation.
+The concurrent priority queue proposed by Vipin {\it et. al}~\cite{pq6} leads a new direction of parallel heap processing. 
+It shows how insert and delete operations can be processed from the root node; in particular, the authors formulate the insertion path from the root to the last node. 
+Although the paper does not show fine-grained cycle operation during the concurrent process, it theoretically shows the complexity of concurrent heap processing by addressing the locking meachnism at system-level implementation.
 
-There are several parallel implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements, though they have individual drawbacks.
+Moving forward from the concurrent software priority queue, there are several parallel hardware implementations of a priority queue~\cite{hw1,hw2,hw8,hw9,fpga1,fpga2,fpga3} for handling a large volume of elements, though they have individual drawbacks.
 The {\it Systolic Arrays} and {\it Shift Registers} based approaches \cite{hw8,hw9}, for example, are not scalable and require $O(n)$ comparators for $n$ nodes.
 FPGA-based pipelined heap, presented by Ioannou {\it et. al} \cite{fpga1}, is scalable and can run for 64K nodes, but it stalls parallel insert-delete operations. Calendar queues \cite{hw1} incur significant hardware cost when supporting a large priority set. A hybrid priority queue architecture proposed by \cite{hwsw1} operates on $O(log \ n)$ time.
 
