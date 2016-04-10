@@ -385,12 +385,3 @@ In a theoretical event where 512 registers cannot prevent all holes from being r
 
 As with other implementations, the presence of holes in our heap doesn't invalidate the correctness of the heap itself.
 
-\subsubsection{Bhagwan and Lin}
-The insert algorithm for Bhagwan and Lin's pipelined heap \cite{hw2} checks whether at least one empty node exists somewhere in the left subtree of each node the insert operation propagates through. 
-If there is no empty node, the insert path moves to the right subtree. 
-This means that the insert operations will always fill empty nodes starting from the left, moving down. 
-Although this algorithm does guarantee that holes are {\it eventually} minimized, it does not do so in the next immediate {\it inserts}. 
-It also inherently creates more holes than it minimizes and creates an imbalanced tree. 
-Both of these effects waste hardware resources unless the heap is full and result in longer response time.
-
-In comparison, insert operations in our heap always fills all nodes in each level before moving down to the next, and they fill any holes that are created immediately. Thus, our heap more efficiently uses hardware storage and has lower response time than \cite{hw2}.
