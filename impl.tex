@@ -32,10 +32,10 @@ In this example, the root node is stored in $L_1$; two elements are stored in th
 
 The {\it insert} operation is intimated from the last available node of a heap.
 However, if a bottom-up insertion is done in parallel with other operations such as {\it min-delete}, it may cause an inconsistency in the heap.
-To clarify, let us consider the example in Figure \ref{fig5}.
+To clarify, let us consider the heap in Figure \ref{fig5}.
 Suppose we insert element $3$ into the heap and then immediately delete one element.
 Let us assume nodes at each level get updated in a single clock cycle.
-That means, in the worst case, a total of four clock cycles is required to complete only an insert operation in this situation.
+That means a total of four clock cycles is required to complete only an insert operation in this situation.
 Before it completes, if a {\it min-delete} comes, that operation has to wait up to four clock cycles to avoid deleting a wrong element from the root ($5$ in this case).
 Thus, it is incumbent to insert from the root and go down.
 However, we need to know the exact path for the newly inserted element, otherwise the tree will no longer hold the conditions of a complete binary tree.
@@ -61,7 +61,7 @@ One conventional approach for deleting an element from a heap is to delete from 
 There are two difficulties here:
 
 \begin{enumerate}
-\item For sequential operation, this method works fine. Parallel execution of insert/delete, however, can create a hole. This happens after any {\t insert} followed by {\it min-delete}.
+\item For sequential operation, this method works fine. Parallel execution of {\it insert-delete} (a {\it min-delete} that follows an {\it insert}), however, can create a hole.
 \item Replacing the root with the last element of the heap requires an additional clock cycle to write that element into the root node. Additionally, we need to compare three elements: root and its two children, or any node and its children. From a hardware perspective, it is cost-efficient to compare two elements rather than three. Moreover, 3-element comparisons cause a longer path delay.
 \end{enumerate}
 
@@ -86,29 +86,28 @@ For the general case, let us assume that an insert operation comes at time $t_i$
 All operations take one clock cycle at any level to complete their respective tasks at that level.
 Only a single node, if any, gets modified for all levels.
 Any insert-delete combination will create a hole if $(t_j - t_i) < \beta\tau$, where $\beta$ is the current depth of the heap and $\tau$ is the cycle time per level. 
-$\beta - 1$ holes can be created in a $\beta$-level heap at most in an {\it insert} followed by consecutive {\it min-deletes}. In the worst case scenario, $\beta_{k_{max}} - 1$ holes during the propagation of an {\it insert}, where $\beta_{k_{max}}$ is the maximum possible depth of the heap. 
 
 The naive approach to avoid a hole from an insert-delete combination is to stall {\it min-delete} from entering the pipeline until {\it insert} completes.
 After insertion completes, the last element will update to the newly filled node.
 Thus, when the delete operation begins, the heap will correctly identify the new node as the last element to replace the root with instead of the node before.
 However, this method turns every {\it insert} that is followed by a {\it min-delete} into a sequential operation.
-The number of cycles the delete operation must wait for the insert operation to complete depends on the heap's depth.
+The number of cycles the delete operation must wait for the insert operation becomes the heap's current depth. 
 In the worst-case scenario, where a binary heap of many levels encounters a sequence containing only insert-delete combinations, performance degrades significantly.
 
 To solve the first issue, we propose a hole minimization technique.
 With this technique, the holes are removed while an insert operation is processed.
-We check for the existence of a hole by checking special-purpose registers, each of $\beta_{k_{max}}$-bit size leangthwhich each stores the location of a hole. 
+We check for the existence of a hole by checking special-purpose registers, which each stores the location of a hole. 
+Each register is of bit size $\beta_{k_{max}}$.
 If a hole exists, we fill it with the new element. 
-We apply the insert algorithm, except we modify it so that the data will be inserted at the position of a hole instead of the last available node.
-In the case of multiple holes, we fill the last hole with inserted data for implementation ease.
-Since $\beta_{k_{max}} - 1$ holes can created at most during the propagation of an {\it insert}, $\beta_{k_{max}} - 1$ registers are required.
+We apply the insert algorithm, except we modify it so that data will be inserted at the position of a hole instead of the last available node.
+In the case of multiple holes, we choose the insert path to the last hole for implementation ease.
 Details of this algorithm are described in the next subsection.
 
 To address the second issue, we intentionally avoid the root replacement by the last element.
 We delete root first and keep it as it is.
 Then, we fill the root with its least child and follow the min-delete algorithm described in the previous section.
 This way, we can save one cycle and minimize the path delay.
-Because this method does not guarantee that the last node to be empty, it creates a hole for any {\it min-delete} regardless whether the operation follows an {\it insert}. 
+Because this method does not guarantee that the last node to be empty, it may create a hole for any {\it min-delete} regardless whether the operation follows an {\it insert}. 
 However, we can still remove the holes using the same hole minimization technique.
 
 \subsection{Insert-Delete Logic Implementation}
@@ -225,13 +224,13 @@ Based on the comparison, either the present data updates the node and the previo
 
 %{\bf Deletion :}
 We also maintain {\it del\_index} to find the last deleted node.
-For example, initially, {\it del\_index} is $1$, meaning the root is deleted.
+For example, initially, {\it del\_index} is $1$, meaning the root is empty.
 %Original version: The comparator finds the min element between $H[del\_index*2]$ and $H[del\_index*2 + 1]$, and that min element is replaced with $H[del\_index]$.
 The comparator finds the min element between $H[del\_index*2]$ and $H[del\_index*2 + 1]$, and that min element replaces $H[del\_index]$.
 Now, {\it del\_index} updates to the index of min element.
 %Original version: Again, the comparator finds the min of the ancestors of the new index and replaces the node of the new index with that of the min element.
 Again, the comparator finds the min child from the new index and replaces the node at the new index with that of the min element.
-Each time, {\it holeCal} determines whether a valid child exists for {\it del\_index}.
+Each time, {\it holeCal} determines whether a valid child exists for $H[del\_index]$.
 If not, then {\it holeCounter} is incremented by 1, and {\it holeReg} is updated with {\it del\_index}.
 In this manner, we maintain {\it hole}.
 
@@ -367,28 +366,28 @@ Some authors replace the root with the last element at {\it min-delete} \cite{hw
 As we discuss before, though it may seem that a hole will not be created with this approach, this is not the case. 
 Figure \ref{hole} demonstrates the hole being created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert} using those authors' operations.
 When inserting $100$, the insert path goes through $H[1] \rightarrow H[3] \rightarrow  H[6] \rightarrow  H[12]$. 
-At the time the {\it insert} is being procesed, the {\it min-delete} comes and replaces the root with the element at node $H[11]$, creating hole at node $H[11]$, as shown at Figure \ref{hole-after}. 
+At the time the {\it insert} is being procesed, the {\it min-delete} comes and replaces the root with the element at node $H[11]$, creating a hole at node $H[11]$, as shown at Figure \ref{hole-after}. 
 We consider the node at $H[11]$ as a hole because it does not contain any data when its next neighbor, $H[12]$, does. 
 This situation could be avoided if the root was replaced by $H[12]$.
 However, that requires having {\it min-delete} wait until {\it insert} completes. 
-So, any consecutive {\it insert-delete} will lead to hole creation with the root replacement mechanism for other heaps, regardless whether the {\it insert} comes first or second.
+So, any consecutive {\it insert-delete} will lead to hole creation with the root replacement mechanism for other heaps.
 
 \subsubsection{How Holes are Minimized} 
-When a hole is created in our proposed heap, its location is saved into a register. 
+When a hole is created in our proposed heap, its location is saved into a hole register. 
 The inserted node goes to that location instead of the last available location. 
 For example, with the heap from Figure \ref{hole-latches}, the hole index $11$ is stored at a hole register. 
-The last available insert node location is index $13$ in the normal implementation. 
 Now, let us insert $3$ into the heap. 
-We consider the hole index $11$ for constructing the insert path. 
+The last available insert node location would be index $13$ in a naive pipelined heap implementation. 
+But instead, we use the hole index $11$ for constructing the insert path. 
 According to our algorithm, the insert path is $H[1] \rightarrow H[2] \rightarrow H[5] \rightarrow H[11]$. 
 This hole is filled by the element $41$ during the insert operation, as shown in Figure \ref{fillhole}. 
-The naive implementations consider the index $13$ for the insert path.
-As a result, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not gaurantee the hole minimization.
+Meanwhile, for the naive implementations, as the index $13$ would be considered for the insert path, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not gaurantee the hole minimization.
 
 
 \subsubsection{Worst Case Scenario}
-To fill any possible number of holes, $2^{\beta_{k_{max}}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{k_{max}}-1}$ nodes. 
-However, dedicating this many registers to address the worst case scenario wastes hardware storage, which is the very problem we are minimizing. 
+To fill any possible number of holes, $2^{\beta_{k_{max}}-1} - 1$ registers are required, where $\beta_{k_{max}}$ is the maximum depth of the heap. 
+That is because the last level can have up to $2^{\beta_{k_{max}}-1}$ nodes, and of course, no holes exist at the current level if all nodes at that level are empty.
+However, dedicating this many registers to address the worst case scenario wastes hardware storage, which is the very problem we are addressing. 
 Moreover, this number is only theoretical.
 
 For a 32-max-level heap, we believe that 512 registers is enough based on our evaluations using standard benchmarks.

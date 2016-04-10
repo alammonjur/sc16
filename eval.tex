@@ -162,11 +162,12 @@ They require $2 \times \beta$ comparators, flip-flops, and SRAM, whereas our des
 The hole minimization and hardware sharing techniques have achieved aggressive optimization in hardware cost. Both the designs perform better throughput; as \cite{hw2} is implemented by using TSMC
 0.35  micron CMOS standard-cell technology and \cite{fpga1} is implemented at ASIC platform.
 
-The insert algorithm for Bhagwan and Lin's pipelined heap \cite{hw2} checks whether at least one empty node exists somewhere in the left subtree of each node the insert operation propagates through. 
+The significantly higher frequency our proposed heap offers compared to Bhagwan and Lin's \cite{hw2} is expected. 
+The latter's insert algorithm checks whether at least one empty node exists somewhere in the left subtree of each node the insert operation propagates through. 
 If there is no empty node, the insert path moves to the right subtree. 
 This means that the insert operations will always fill empty nodes starting from the left, moving down. 
 Although this algorithm does guarantee that holes are {\it eventually} minimized, it does not do so in the next immediate {\it inserts}. 
 It also inherently creates more holes than it minimizes and creates an imbalanced tree. 
-Both of these effects waste hardware resources unless the heap is full and result in longer response time.
+Both of these effects not only waste hardware resources unless the heap is full, but they also result in longer response time.
 
-In comparison, insert operations in our heap always fills all nodes in each level before moving down to the next, and they fill any holes that are created immediately. Thus, our heap more efficiently uses hardware storage and has lower response time than \cite{hw2}.
+In comparison, insert operations in our heap always fill all empty nodes in each level before moving down to the next new level, and they fill any holes that are created immediately. Thus, our heap more efficiently uses hardware storage and has lower response time than \cite{hw2}.
