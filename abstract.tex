@@ -5,9 +5,9 @@ Several parallel solutions have been proposed, but they incur significant hardwa
 In this paper, we propose a hardware realization of a pipelined binary heap.
 Our proposed technique makes three key contributions.
 (1) We provide a {\it hole} minimization technique that forces the tree structure to be a complete binary heap.
-This technique reduces the hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 4.48\%.
+This technique reduces the hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 14.48\%.
 It allows the proposed design to take $O(1)$ time for {\it min-delete} and {\it insert} operations by ensuring minimum wait time between two consecutive operations.
-(2) Sharing hardware between two consecutive pipelined levels reduces hardware cost even further by 3.70\%.
+(2) Sharing hardware between two consecutive pipelined levels reduces hardware cost even further by 7.70\%.
 (3) We introduce a {\it replacement} operation, which reduces the response time by 30.36\%.
 As a result, the proposed technique incurs 78.50\% less overhead while achieving similar performance compared to existing techniques.
 \end{abstract}

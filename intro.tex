@@ -15,8 +15,8 @@ Although holes can be eliminated by rebalancing the tree, doing so requires a no
 Toward this end, this paper proposes an efficient, parallel hardware-based implementation.
 The contributions of this paper are summarized as follows:
 \begin{itemize}
-\item {\bf Hole minimization:} The proposed approach minimizes holes created by parallel operations on a priority queue. Our hole minimization technique reduces hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 4.48\%.
-\item {\bf Hardware sharing:} Sharing hardware between two consecutive pipelined levels reduces the hardware cost. The hardware sharing technique contributes a 3.70\% cost reduction.
+\item {\bf Hole minimization:} The proposed approach minimizes holes created by parallel operations on a priority queue. Our hole minimization technique reduces hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 14.48\%.
+\item {\bf Hardware sharing:} Sharing hardware between two consecutive pipelined levels reduces the hardware cost. The hardware sharing technique contributes a 7.70\% cost reduction.
 \item {\bf Replacement operation:} Upon detection of a min-delete operation immediately followed by an insert operation, a {\it replacement} operation substitutes these two operations. This method reduces average response time by 30.36\%.
 \end{itemize}
 
