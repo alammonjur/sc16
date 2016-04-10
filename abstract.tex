@@ -4,7 +4,7 @@ A parallel implementation of a heap is expected to offer higher throughput and q
 Several parallel hardware solutions have been proposed, but they incur significant hardware cost by producing {\it holes} in a heap via parallel {\it insert-delete} operations. Holes result in an unbalanced, incomplete binary heap, which leads to longer response time, and they also waste hardware resources.
 
 In this paper, we demonstrate the significant consequences of holes in terms of hardware and response time.
-We propose a FPGA realization of a pipelined binary heap that addresses holes. 
+We propose a hardware realization of a pipelined binary heap that addresses holes. 
 Our primary contribution, a hole minimization technique, forces the tree structure to be a complete binary heap.
 This technique reduces the hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 14.48\%.
 It allows the proposed design to take $O(1)$ time for {\it min-delete} and {\it insert} operations by ensuring minimum wait time between two consecutive operations. Our proposed heap makes two other contributions. 

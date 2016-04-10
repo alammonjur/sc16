@@ -17,7 +17,7 @@ Retaining them not only introduces additional overhead, but it also leads to an 
 Although holes can be eliminated by rebalancing the tree, doing so requires a non-negligible number of cycles, during which no further insert or delete operations can be processed.
 
 Toward this end, we demonstrate the significant, negative consequences of holes with respect to hardware cost and response time and shows how holes can be minimized.
-We propose an efficient, parallel FPGA-based binary heap with the following summarized contributions: 
+We propose an efficient, parallel hardware implementation of binary heap with the following summarized contributions: 
 \begin{itemize}
 \item {\bf Hole minimization:} The proposed approach minimizes holes created by parallel operations on a priority queue. Our hole minimization technique reduces hardware cost by 37.76\% in terms of number of lookup tables (LUTs) and average response time by 14.48\%.
 \item {\bf Hardware sharing:} Sharing hardware between two consecutive pipelined levels reduces the hardware cost. The hardware sharing technique contributes a 7.70\% cost reduction.

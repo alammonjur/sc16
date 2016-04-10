@@ -1,9 +1,9 @@
 \section{Conclusions}
 \label{s:cons}
 
-In this paper, we propose a FPGA-based realization of a priority queue that is based on a binary heap.
-The heap is implemented in a pipelined fashion in hardware.
-Our design takes $O(1)$ time for all operations by ensuring minimum wait time between two consecutive operations.
+In this paper, we propose a hardware realization of a priority queue that is based on a binary heap. 
+The heap is implemented in a pipelined fashion in FPGA platform. 
+Our design takes $O(1)$ time for all operations by ensuring minimum wait time between two consecutive operations. We demonstrate the significant, negative consequences of holes with respect to hardware cost and response time. 
 We propose two techniques for hardware optimization: hole minimization and hardware sharing between two consecutive levels.
 In addition, hole minimization can ensure a balanced heap structure, which contributes to a reduction in response time.
 The replacement operation, a different optimization technique we introduce, reduces response time further by substituting a pair of insert and delete operations with one replacement operation that does not create a hole.
