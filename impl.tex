@@ -97,7 +97,7 @@ In the worst-case scenario, where a binary heap of many levels encounters a sequ
 
 To solve the first issue, we propose a hole minimization technique.
 With this technique, the holes are removed while an insert operation is processed.
-We check for the existence of a hole by checking special-purpose registers, which each stores the location of a hole. 
+We check for the existence of a hole by checking special-purpose registers, each of $\beta_{k_{max}}$-bit size leangthwhich each stores the location of a hole. 
 If a hole exists, we fill it with the new element. 
 We apply the insert algorithm, except we modify it so that the data will be inserted at the position of a hole instead of the last available node.
 In the case of multiple holes, we fill the last hole with inserted data for implementation ease.
@@ -361,8 +361,6 @@ Thus, this optimization can work in parallel with our hole minimization techniqu
 Some authors replace the root with the last element at delete operation \cite{hw2,hw3}. 
 It may seem that a hole will not be created with this approach, but this is not the case. Figure \ref{hole} demonstrates how a hole is created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert}.  Here, new element comes at node $H[12]$ and insert path goes through $H[1] \rightarrow H[3] \rightarrow  H[6] \rightarrow  H[12]$. But, at the time insert is being procesed, delete operation replace the root with the element at node $H[11]$ and creates hole at node $H[11]$ as shown at Figure \ref{hole-after}. We consider the node at $H[11]$ as hole because it does not contain any data, but its next node $H[12]$ does contain data. This situation could have avoid if the root was replace by the element of $H[12]$ in this case. That means, the delete operation has to wait till the insert is completed. So, any consecutive insert-delete operation will lead to create hole for replacement mechanishm, no matter in which order they perform.
 
-We can resolve these holes by using $\beta_{max}$ number of register banks each of with $\beta$ bits leangth, where $\beta_{max}$ is the maximum depth of the heap. For example, to simulate $2^{32}$ numbers of nodes, only 32 numbers of registers each having 32-bit leangth is enough. 
-
 \subsubsection{How Holes are Minimized} 
 When a hole is created, its location is saved into a register. 
 The inserted node goes to that location instead of the last available location. 
@@ -377,13 +375,22 @@ As a result, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \righta
 
 
 \subsubsection{Worst Case Scenario}
-To fill any possible number of holes, $2^{\beta_{max}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{max}-1}$ nodes. 
+To fill any possible number of holes, $2^{\beta_{k_{max}}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{k_{max}}-1}$ nodes. 
 However, dedicating this many registers to address the worst case scenario wastes hardware storage, which is the very problem we are minimizing. 
 Moreover, this number is only theoretical.
-For a 32-max-level heap, we believe that 512 registers is enough based on our evaluations using standard benchmark..
+
+For a 32-max-level heap, we believe that 512 registers is enough based on our evaluations using standard benchmarks.
 We find that the worst empirical case scenario creates 512 holes while the average case creates 10 to 12 holes.
 In a theoretical event where 512 registers cannot prevent all holes from being removed, our heap still saves hardware resources compared to other parallel hardware implementations of this maximum depth. 
+
 As with other implementations, the presence of holes in our heap doesn't invalidate the correctness of the heap itself.
 
 \subsubsection{Bhagwan and Lin}
-The insert algorithm for Bhagwan and Lin's pipelined heap \cite{hw2} checks whether at least one empty node exists somewhere in the left subtree of each node the insert operation propagates through. If there is no empty node, the insert path moves to the right subtree. This means that the insert operations will always fill empty nodes starting from the left, moving down. Although this algorithm does guarantee that holes are eventually minimized, it does not do so in the next immediate {\it inserts}. It also inherently creates more holes than it minimizes and creates an imbalanced tree, both of which results in longer response time. In comparison, insert operations in our heap always fills all nodes in each level before moving down to the next, and they fill any holes that are created immediately. Thus, our heap more efficiently uses hardware storage and has lower response time than \cite{hw2}.
+The insert algorithm for Bhagwan and Lin's pipelined heap \cite{hw2} checks whether at least one empty node exists somewhere in the left subtree of each node the insert operation propagates through. 
+If there is no empty node, the insert path moves to the right subtree. 
+This means that the insert operations will always fill empty nodes starting from the left, moving down. 
+Although this algorithm does guarantee that holes are {\it eventually} minimized, it does not do so in the next immediate {\it inserts}. 
+It also inherently creates more holes than it minimizes and creates an imbalanced tree. 
+Both of these effects waste hardware resources unless the heap is full and result in longer response time.
+
+In comparison, insert operations in our heap always fills all nodes in each level before moving down to the next, and they fill any holes that are created immediately. Thus, our heap more efficiently uses hardware storage and has lower response time than \cite{hw2}.
