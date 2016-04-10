@@ -376,7 +376,6 @@ The naive implementations consider the index $13$ for the insert path.
 As a result, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not gaurantee the hole minimization.
 
 
-
 \subsubsection{Worst Case Scenario}
 To fill any possible number of holes, $2^{\beta_{max}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{max}-1}$ nodes. 
 However, dedicating this many registers to address the worst case scenario wastes hardware storage, which is the very problem we are minimizing. 
@@ -386,5 +385,5 @@ We find that the worst empirical case scenario creates 512 holes while the avera
 In a theoretical event where 512 registers cannot prevent all holes from being removed, our heap still saves hardware resources compared to other parallel hardware implementations of this maximum depth. 
 As with other implementations, the presence of holes in our heap doesn't invalidate the correctness of the heap itself.
 
-% \subsubsection{Micros}'
-% The insert algorithm in Bhagwan and Lin's pipelined heap \ref{hw2} always fill empty nodes starting from the left going down. For each node, it considers whether an empty node exists in the left child path. If not, it moves to the right child path. In a sense, this 
+\subsubsection{Bhagwan and Lin}
+The insert algorithm for Bhagwan and Lin's pipelined heap \cite{hw2} checks whether at least one empty node exists somewhere in the left subtree of each node the insert operation propagates through. If there is no empty node, the insert path moves to the right subtree. This means that the insert operations will always fill empty nodes starting from the left, moving down. Although this algorithm does guarantee that holes are eventually minimized, it does not do so in the next immediate {\it inserts}. It also inherently creates more holes than it minimizes and creates an imbalanced tree, both of which results in longer response time. In comparison, insert operations in our heap always fills all nodes in each level before moving down to the next, and they fill any holes that are created immediately. Thus, our heap more efficiently uses hardware storage and has lower response time than \cite{hw2}.
