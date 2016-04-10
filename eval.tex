@@ -89,7 +89,7 @@ The number of elements in the heap is $2^\omega-1 = 2^\beta -1$.
  \hline
  \cite{hw8} & $2^\beta$ & $2^{\beta +1}$& 0 & 8560 & - & - & $O(1)$ & Yes\\
  \hline
- \cite{hw11} & $2 \times \beta$ & $2^{\beta +1}$ & 0 & 1411 & - & - & $O(\log n)$ & Yes\\
+ \cite{fpga2} & $2 \times \beta$ & $2^{\beta +1}$ & 0 & 1411 & - & - & $O(\log n)$ & Yes\\
  \hline
  \cite{hwsw1} & - & $2 \times \beta$ & $2 \times \beta$ & 3161 & - & - & $O(\log n)$ & No\\
  \hline
@@ -152,8 +152,8 @@ However, while reference~\cite{hw8} requires $2^\beta$ comparators and $2^{\beta
 
 Kumar {\it et. al} \cite{hwsw1} do not report neither throughput nor frequency, our design is better than their design in terms of LUT count. Moreover, it operates on $O(\log n)$ time.
 
-Reference~\cite{hw11} offers seemingly less overhead, but the result is, in fact, {\it underestimated}.
-While reference~\cite{hw11} is a hybrid approach combining hardware and software, the overhead in this table accounts only for hardware.
+Reference~\cite{fpga2} offers seemingly less overhead, but the result is, in fact, {\it underestimated}.
+While reference~\cite{fpga2} is a hybrid approach combining hardware and software, the overhead in this table accounts only for hardware.
 In addition, the response time of the hybrid approach is not scalable with the number of nodes.
 
 References~\cite{fpga1,hw2} do not report the number of LUTs, but we can compare their hardware cost by complexity analysis.
