@@ -283,7 +283,7 @@ Figure \ref{clock1} illustrates the pipeline flow for a parallel insert operatio
 
 {\bf Cycle $t+2$:} $L_i$ performs {\it write}. $L_{i+1}$ finishes {\it comp}, which generates the index to be read by $L_{i+2}$.
 
-{\bf CYcle $t+3$:} $L_i$ can accept a new operation. $L_{i+1}$ performs {\it write}. $L_{i+2}$ completes {\it comp}, which generates the index for $L_{i+3}$.
+{\bf Cycle $t+3$:} $L_i$ can accept a new operation. $L_{i+1}$ performs {\it write}. $L_{i+2}$ completes {\it comp}, which generates the index for $L_{i+3}$.
 
 The pattern repeats for subsequent levels until the insert operation finishes.
 Effectively, this results in a {\it write} at each clock cycle after an initial latency of two clock cycles at the first level.
@@ -363,11 +363,18 @@ Thus, this optimization can work in parallel with our hole minimization techniqu
 \end{figure}
 
 \subsubsection{Root Replacement by Last Element}
-Some authors replace the root with the last element at delete operation \cite{hw2,hw3}. 
-It may seem that a hole will not be created with this approach, but this is not the case. Figure \ref{hole} demonstrates how a hole is created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert}.  Here, new element comes at node $H[12]$ and insert path goes through $H[1] \rightarrow H[3] \rightarrow  H[6] \rightarrow  H[12]$. But, at the time insert is being procesed, delete operation replace the root with the element at node $H[11]$ and creates hole at node $H[11]$ as shown at Figure \ref{hole-after}. We consider the node at $H[11]$ as hole because it does not contain any data, but its next node $H[12]$ does contain data. This situation could have avoid if the root was replace by the element of $H[12]$ in this case. That means, the delete operation has to wait till the insert is completed. So, any consecutive insert-delete operation will lead to create hole for replacement mechanishm, no matter in which order they perform.
+Some authors replace the root with the last element at {\it min-delete} \cite{hw2,hw3} for their proposed heaps. 
+As we discuss before, though it may seem that a hole will not be created with this approach, this is not the case. 
+Figure \ref{hole} demonstrates the hole being created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert} using those authors' operations.
+When inserting $100$, the insert path goes through $H[1] \rightarrow H[3] \rightarrow  H[6] \rightarrow  H[12]$. 
+At the time the {\it insert} is being procesed, the {\it min-delete} comes and replaces the root with the element at node $H[11]$, creating hole at node $H[11]$, as shown at Figure \ref{hole-after}. 
+We consider the node at $H[11]$ as a hole because it does not contain any data when its next neighbor, $H[12]$, does. 
+This situation could be avoided if the root was replaced by $H[12]$.
+However, that requires having {\it min-delete} wait until {\it insert} completes. 
+So, any consecutive {\it insert-delete} will lead to hole creation with the root replacement mechanism for other heaps, regardless whether the {\it insert} comes first or second.
 
 \subsubsection{How Holes are Minimized} 
-When a hole is created, its location is saved into a register. 
+When a hole is created in our proposed heap, its location is saved into a register. 
 The inserted node goes to that location instead of the last available location. 
 For example, with the heap from Figure \ref{hole-latches}, the hole index $11$ is stored at a hole register. 
 The last available insert node location is index $13$ in the normal implementation. 
