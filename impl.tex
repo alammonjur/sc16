@@ -349,13 +349,21 @@ Thus, this optimization can work in parallel with our hole minimization techniqu
 
 
 \subsection{Case Studies}
-\subsubsection{How Holes are Minimized} 
+
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=7cm]{fig/fillhole.png}
       \caption{Using our hole minimization technique, the hole that exists between $53$ and $100$ in Figure \ref{hole-after} gets filled with 41 after inserting $3$ into the heap.}
     \label{fillhole}
 \end{figure}
+
+\subsubsection{Root Replacement by Last Element}
+Some authors replace the root with the last element at delete operation \cite{hw2,hw3}. 
+It may seem that a hole will not be created with this approach, but this is not the case. Figure \ref{hole} demonstrates how a hole is created during a parallel insert-delete operation on the heap from Figure \ref{normal-insert}.  Here, new element comes at node $H[12]$ and insert path goes through $H[1] \rightarrow H[3] \rightarrow  H[6] \rightarrow  H[12]$. But, at the time insert is being procesed, delete operation replace the root with the element at node $H[11]$ and creates hole at node $H[11]$ as shown at Figure \ref{hole-after}. We consider the node at $H[11]$ as hole because it does not contain any data, but its next node $H[12]$ does contain data. This situation could have avoid if the root was replace by the element of $H[12]$ in this case. That means, the delete operation has to wait till the insert is completed. So, any consecutive insert-delete operation will lead to create hole for replacement mechanishm, no matter in which order they perform.
+
+We can resolve these holes by using $\beta_{max}$ number of register banks each of with $\beta$ bits leangth, where $\beta_{max}$ is the maximum depth of the heap. For example, to simulate $2^{32}$ numbers of nodes, only 32 numbers of registers each having 32-bit leangth is enough. 
+
+\subsubsection{How Holes are Minimized} 
 When a hole is created, its location is saved into a register. 
 The inserted node goes to that location instead of the last available location. 
 For example, with the heap from Figure \ref{hole-latches}, the hole index $11$ is stored at a hole register. 
@@ -367,23 +375,7 @@ This hole is filled by the element $41$ during the insert operation, as shown in
 The naive implementations consider the index $13$ for the insert path.
 As a result, their path would be $H[1] \rightarrow H[3] \rightarrow H[6] \rightarrow H[13]$, which does not gaurantee the hole minimization.
 
-\subsubsection{Root Replacement by Last Element}
-Some authors replace the root with the last element at delete operation \cite{hw2,hw3}. 
-It may seem that a hole will not be created with this approach, but this is not the case. 
-Before the completion of the pipeline propagation of {\it delete}, insert operation will lead to hole. 
-Let our initial heap be the one shown in Figure \ref{fig7}. 
-Now we perform two consecutive operations, {\it insert} and {\it min-delete}, no matter which order. 
-The resulting structure is shown at Figure \ref{hole-latches}. 
-The hole location can be changed based on the data it already has. 
-The hole will not be the outcome for only one situation: if the both insert and delete path end at the last node. 
-THese authors do not address these issues.
 
-The replacement techniques we use at the previous section may solve this hole problem here. 
-Because there are no new data to be deleted, only root is replaced by the newly inserted element. 
-But the next {\it min-delete} will be stalled until the completion of the operation of the full pipelined path. 
-Here, the replacement can be apply only when the last location gets its correct element.
-
-We can resolve these holes by using $\beta_{max}$ number of register banks each of with $\beta$ bits leangth, where $\beta_{max}$ is the maximum depth of the heap. For example, to simulate $2^{32}$ numbers of nodes, only 32 numbers of registers each having 32-bit leangth is enough. As we mentined, root replacement technique stall the pipeline cycle more and it stronlgly deploy three element comparision at each level of the heap, we avoid root replacement technique. We remove the root at the first cycle and replace the root by the least element of its children at the next cycle. Eventually, the previous of the last level element is replaced by the last level element. I say that whole is creted if the last level element which goes up the previous level is not the last element of the heap. We store this hole location into a register for the use of the next insert instruction. In case of delete followed by insert instruction {\it DI} (if the both instructions are available before the delete starts), this can be considered as replace of root by the insert element rather than root's children.
 
 \subsubsection{Worst Case Scenario}
 To fill any possible number of holes, $2^{\beta_{max}-1} - 1$ registers are required, as the last level can have up to $2^{\beta_{max}-1}$ nodes. 
