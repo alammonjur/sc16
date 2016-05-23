@@ -1,1 +1,23 @@
-rebuttal.txt
+Reviewer 1:
+Rebuttal Comments: 
+The holeReg keeps the address for a new element to be inserted. Instead of adding the new element at the last node, 
+the element is kept at the node adddress resides in holeReg; starting from root and modify each level accordingly before reaching to the
+final location. This algorithm is presented in section III, the algorithm 1.
+
+Weakness Comments:
+1. Yes, we can include and break up these statistics
+2."slice" and LUT data come from ISE synthesis tool
+3. Will remove all typo
+
+Reviewer 2:
+Rebuttal Comments:
+In section III/E/3, we discuss the cost for the implementation of hole minimization for different cases. 
+Detaild Comments:
+The theoritical analysis of cost for hole is at section II/A (Fig 7). The numerical statistics are given at table II and table III
+Search operation should be trivial in our design and withour much changing we can do that.
+
+Reviewer 3:
+
+
+
+
