@@ -1,8 +1,8 @@
 Reviewer 1:
 Rebuttal Comments: 
 The holeReg keeps the address for a new element to be inserted. Instead of adding the new element at the last node, 
-the element is kept at the node adddress resides in holeReg; starting from root and modify each level accordingly before reaching to the
-final location. By this way it preserve the min-heap property. This algorithm is presented in section III, the algorithm 1.
+the element is kept at the node address resides in holeReg; starting from the root and modify each level accordingly before reaching to the
+final location. By this way, it preserve the min-heap property. This algorithm is presented in section III, the algorithm 1.
 
 Weakness Comments:
 1. Yes, we can include and break up these statistics
@@ -12,18 +12,17 @@ Weakness Comments:
 Reviewer 2:
 Rebuttal Comments:
 In section III/E/3, we discuss the cost for the implementation of hole minimization for different cases. 
-Detaild Comments:
-The theoritical analysis of cost for hole is at section II/A (Fig 7). The numerical statistics are given at table II and table III
-Search operation should be trivial in our design and withour much changing we can do that.
+Detailed Comments:
+The theoretical analysis of cost for the hole is at section II/A (Fig 7). The numerical statistics are given at table II and table III
+Search operation should be trivial in our design and without much changing we can do that.
 
 Reviewer 3:
 Rebuttal Comments:
 1. 
 2.
-3. The best way to analyze at application level effectiveness, it is required to deploy the technique into real application.
-Unfortunately, we did not have such scople. The performance is highly dependent on input sequence as discussed in section III/E/2. The
-performace of Table II and Table III is based on instruction (insert/delete) secuence generated randomly; i.e average case is presented.
-
+3. The best way to analyze at application level effectiveness, it is required to deploy the technique into a real application.
+Unfortunately, we did not have such scope. The performance is highly dependent on input sequence as discussed in section III/E/2. The
+the performance of Table II and Table III is based on instruction (insert/delete) sequence generated randomly; the i.e average case is presented.
 
 
 
