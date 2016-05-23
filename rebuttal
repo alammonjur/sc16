@@ -2,7 +2,7 @@ Reviewer 1:
 Rebuttal Comments: 
 The holeReg keeps the address for a new element to be inserted. Instead of adding the new element at the last node, 
 the element is kept at the node adddress resides in holeReg; starting from root and modify each level accordingly before reaching to the
-final location. This algorithm is presented in section III, the algorithm 1.
+final location. By this way it preserve the min-heap property. This algorithm is presented in section III, the algorithm 1.
 
 Weakness Comments:
 1. Yes, we can include and break up these statistics
