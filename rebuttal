@@ -17,6 +17,13 @@ The theoritical analysis of cost for hole is at section II/A (Fig 7). The numeri
 Search operation should be trivial in our design and withour much changing we can do that.
 
 Reviewer 3:
+Rebuttal Comments:
+1. 
+2.
+3. The best way to analyze at application level effectiveness, it is required to deploy the technique into real application.
+Unfortunately, we did not have such scople. The performance is highly dependent on input sequence as discussed in section III/E/2. The
+performace of Table II and Table III is based on instruction (insert/delete) secuence generated randomly; i.e average case is presented.
+
 
 
 
