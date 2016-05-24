@@ -13,7 +13,8 @@ of section IVsite.
 3. Will remove all typo
 
 Detailed Comments:
-To find the path of insertion, we need to know the level of the position of the new node to be inserted.  Yes, There could have an alternate way to minimize this path delay. By using a special register which can contain the level of next available node. The value of the register can be carefully modified based on insert operation and the holeReg value. To implement this logic need more hardware, and may be, the critical path would be here!  
+To find the path of insertion, we need to know the level of the position of the new node to be inserted.  
+Yes, There could have an alternate way to minimize this path delay. By using a special register which can contain the level of next available node. The value of the register can be carefully modified based on insert operation and the holeReg value. To implement this logic need more hardware, and may be, the critical path would be here!  
 
 
 Reviewer 2:
