@@ -1,13 +1,21 @@
 Reviewer 1:
 Rebuttal Comments: 
 The holeReg keeps the address for a new element to be inserted. Instead of adding the new element at the last node, 
-the element is kept at the node address resides in holeReg; starting from the root and modify each level accordingly before reaching to the
-final location. By this way, it preserves the min-heap property. This algorithm is presented in section III, the algorithm 1.
+the element is kept at the node address resides in holeReg; starting from the root and modify each level accordingly before reaching 
+to the final location. By this way, it preserves the min-heap property. This algorithm is presented in section III, 
+the algorithm 1.
 
 Weakness Comments:
-1. Yes, we can include and break up these statistics
-2."slice" and LUT data come from ISE synthesis tool
+1. Yes, we should have include and break up these statistics. However, flip-flop used is presented at Table II and SRAM presented at
+Table IV in terms of priority bit.
+2. Unfortunately this is typo, the columns in Table II of LUT and "slice" should interchage the position and hence some other part
+of section IVsite.
 3. Will remove all typo
+
+Detailed Comments:
+To find the path of insertion, we need to know the level of the position of new node to be inserted. The other ways (LUT, etc.)
+might increase hardware cost.
+
 
 Reviewer 2:
 Rebuttal Comments:
@@ -35,4 +43,5 @@ Reviewer 4:
 
 Detailed Comments:
 The two designs of references 2 and 12 are ASIC implementation without hole concern; and there is no LUT statistics here.
+
 
