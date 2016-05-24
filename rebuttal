@@ -1,6 +1,6 @@
 Reviewer 1:
 Rebuttal Comments: 
-The holeReg decides the insertion path of new element by keeping the address for a hole. Instead of adding the new element at the last  node, the element is inserted at the address that holeReg contains. In case of multiple addresses, we should carefully select the  last available hole and this can be done by holeCounter value. Now,  compare and swap start  from the root and modify each level accordingly before reaching to the final location. By this way, it preserves the min-heap property. This algorithm is presented in section III,  the Algorithm 1. 
+The holeReg decides the insertion path of new element by keeping the address for a hole. Instead of adding the new element at the last node, the element is inserted at the address that holeReg contains. In case of multiple addresses, we should carefully select the last available hole and this can be done by holeCounter value. Now,  compare and swap start  from the root and modify each level accordingly before reaching to the final location. By this way, it preserves the min-heap property. This algorithm is presented in section III,  the Algorithm 1. 
 
 Weakness Comments:
 1. Yes, we should have included and break up these statistics. However, flip-flop used is presented in Table II and SRAM presented at
@@ -10,22 +10,22 @@ of section IVsite.
 3. Will remove all typo
 
 Detailed Comments:
-To find the path of insertion, we need to know the level of the position of the new node to be inserted.  
-Yes, There could have an alternate way to minimize this path delay. By using a special register which can contain the level of next available node. The value of the register can be carefully modified based on insert operation and the holeReg value. To implement this logic need more hardware, and may be, the critical path would be here!  
+To find the path of insertion, we need to know the level of the position of the new node to be inserted.  Yes, There could have an alternate way to minimize this path delay. By using a special register which can contain the "level" of next available node. The value of the register can be carefully modified based on insert operation and the holeReg value. To implement this logic, we need more hardware, and may be, the critical path would be here!  
 
 
 Reviewer 2:
 Rebuttal Comments:
 In section III/E/3, we discuss the cost for the implementation of hole minimization for different cases. Yes, we (probably) could have
 a breakdown the costs in terms of functionality. But it is not so trivial. For instance, the hole is the output of parallel insert-delete. 
-To calculate the cost for insert/delete separate will not make sense. Hole incorporate more hardware. To reduce hole, extra logic is
+To calculate the cost for insert/delete separate will not make sense. Hole incorporates more hardware. To reduce hole, extra logic is
 implemented and extra registers are required. It will be difficult to show the absolute numbers for hole register part, extra logic part
-, etc. We can show the overall cost difference (TABLE II and Table III) with the hole and without hole minimization.
+, etc. as the integrated design is synthesized as a whole. We can show the overall cost difference (TABLE II and Table III) with the hole and without the hole minimization.
 
 Detailed Comments:
 The theoretical analysis of cost for the hole is at section II/A (Fig 7). The numerical statistics are given at table II and table III 
-where results are shown with and without hole minimization
-Search operation should be trivial in our design and without much changing we can do that.
+where results are shown with and without hole minimization.
+Yes, a trade-off between hardware cost and performance for more parallelism could provide quite interest result. 
+Search operation should be trivial in our design and without much changing we can analyze the performance of the search operation.
 
 Reviewer 3:
 Rebuttal Comments:
@@ -45,5 +45,4 @@ Reviewer 4:
 
 Detailed Comments:
 The two designs of references 2 and 12 are ASIC implementation without the hole concern, and there is no LUT statistics here.
-
 
