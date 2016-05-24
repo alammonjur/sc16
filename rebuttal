@@ -2,7 +2,7 @@ Reviewer 1:
 Rebuttal Comments: 
 The holeReg keeps the address for a new element to be inserted. Instead of adding the new element at the last node, 
 the element is kept at the node address resides in holeReg; starting from the root and modify each level accordingly before reaching to the
-final location. By this way, it preserve the min-heap property. This algorithm is presented in section III, the algorithm 1.
+final location. By this way, it preserves the min-heap property. This algorithm is presented in section III, the algorithm 1.
 
 Weakness Comments:
 1. Yes, we can include and break up these statistics
@@ -18,12 +18,21 @@ Search operation should be trivial in our design and without much changing we ca
 
 Reviewer 3:
 Rebuttal Comments:
-1. 
-2.
-3. The best way to analyze at application level effectiveness, it is required to deploy the technique into a real application.
-Unfortunately, we did not have such scope. The performance is highly dependent on input sequence as discussed in section III/E/2. The
+1. The throughput is presented in the way so that we can compare our work with others. In cse of pipelined design, total number of operations per second also is not much significance. It should be 1/frequency in our case, as each operation executes in a cycle ( section III/D, fig 15).
+2. If we see the reference 12, it shows that each pipeline stage time increases with increase of priority bit size. It is true for synthesize tools (ISE) the frequency become lower if we increase the bit length. For example, keeping other design parameters same, the frequency for 4-bit priority data is lower than that of 24-bit priority data.  Becasue, 24-bit priority data can sysnthesis 2^24 nodes and it allocates  2^24 memory cells each 24-bit width. On the other hand, in case of 4-bit priority data,  it can synthesis 2^4 data.  It is the EDA tool which decides the frequency of the circuits of each memory with different bit length. This bit lenght is exactly same as the number of level and its value can be assigned at begining before the code i synthesized.
+3. The best way to analyze at application level effectiveness, is to deploy the technique into a real application.
+Unfortunately, we did not have such scope. The performance is highly dependent on input sequence of instructions as discussed in section III/E/2. The
 the performance of Table II and Table III is based on instruction (insert/delete) sequence generated randomly; the i.e average case is presented.
 
+Detailed Comments:
+In section III/E/3, we discuss the cost for the implementation of hole minimization for different cases.
+Regarding power consumption, we completely agree with you
 
+Reviewer 4:
 
+1. In the scope of the paper, our paper should belong to:   "Architecture and Networks: All aspects of high-performance hardware including the optimization and evaluation of processors and networks" catagory where there are several sub catagories, particularly, "Parallel and scalable system architecture".
+2. 
+
+Detailed Comments:
+The two designs of references 2 and 12 are ASIC implementation without hole concern; and there is no LUT statistics here.
 
