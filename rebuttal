@@ -1,9 +1,6 @@
 Reviewer 1:
 Rebuttal Comments: 
-The holeReg keeps the address for a new element to be inserted. Instead of adding the new element at the last node, 
-the element is kept at the node address resides in holeReg; starting from the root and modify each level accordingly before reaching 
-to the final location. By this way, it preserves the min-heap property. This algorithm is presented in section III, 
-the algorithm 1.
+The holeReg decides the insertion path of new element by keeping the address for a hole. Instead of adding the new element at the last node, the element is inserted at the address that holeReg contains. In case of multiple addresses, we should carefully select the last available hole and this can be done by holeCounter value. Now,  compare and swap start  from the root and modify each level accordingly before reaching to the final location. By this way, it preserves the min-heap property. This algorithm is presented in section III,  the Algorithm 1. 
 
 Weakness Comments:
 1. Yes, we should have included and break up these statistics. However, flip-flop used is presented in Table II and SRAM presented at
