@@ -6,30 +6,36 @@ to the final location. By this way, it preserves the min-heap property. This alg
 the algorithm 1.
 
 Weakness Comments:
-1. Yes, we should have include and break up these statistics. However, flip-flop used is presented at Table II and SRAM presented at
+1. Yes, we should have included and break up these statistics. However, flip-flop used is presented in Table II and SRAM presented at
 Table IV in terms of priority bit.
-2. Unfortunately this is typo, the columns in Table II of LUT and "slice" should interchage the position and hence some other part
+2. Unfortunately, this is a typo, the columns in Table II of LUT and "slice" should interchange the position and hence some other part
 of section IVsite.
 3. Will remove all typo
 
 Detailed Comments:
-To find the path of insertion, we need to know the level of the position of new node to be inserted. The other ways (LUT, etc.)
+To find the path of insertion, we need to know the level of the position of the new node to be inserted. The other ways (LUT, etc.)
 might increase hardware cost.
 
 
 Reviewer 2:
 Rebuttal Comments:
-In section III/E/3, we discuss the cost for the implementation of hole minimization for different cases. 
+In section III/E/3, we discuss the cost for the implementation of hole minimization for different cases. Yes, we (probably) could have
+a breakdown the costs in terms of functionality. But it is not so trivial. For instance, the hole is the output of parallel insert-delete. 
+To calculate the cost for insert/delete separate will not make sense. Hole incorporate more hardware. To reduce hole, extra logic is
+implemented and extra registers are required. It will be difficult to show the absolute numbers for hole register part, extra logic part
+, etc. We can show the overall cost difference (TABLE II and Table III) with the hole and without hole minimization.
+
 Detailed Comments:
-The theoretical analysis of cost for the hole is at section II/A (Fig 7). The numerical statistics are given at table II and table III
+The theoretical analysis of cost for the hole is at section II/A (Fig 7). The numerical statistics are given at table II and table III 
+where results are shown with and without hole minimization
 Search operation should be trivial in our design and without much changing we can do that.
 
 Reviewer 3:
 Rebuttal Comments:
-1. The throughput is presented in the way so that we can compare our work with others. In cse of pipelined design, total number of operations per second also is not much significance. It should be 1/frequency in our case, as each operation executes in a cycle ( section III/D, fig 15).
-2. If we see the reference 12, it shows that each pipeline stage time increases with increase of priority bit size. It is true for synthesize tools (ISE) the frequency become lower if we increase the bit length. For example, keeping other design parameters same, the frequency for 4-bit priority data is lower than that of 24-bit priority data.  Becasue, 24-bit priority data can sysnthesis 2^24 nodes and it allocates  2^24 memory cells each 24-bit width. On the other hand, in case of 4-bit priority data,  it can synthesis 2^4 data.  It is the EDA tool which decides the frequency of the circuits of each memory with different bit length. This bit lenght is exactly same as the number of level and its value can be assigned at begining before the code i synthesized.
-3. The best way to analyze at application level effectiveness, is to deploy the technique into a real application.
-Unfortunately, we did not have such scope. The performance is highly dependent on input sequence of instructions as discussed in section III/E/2. The
+1. The throughput is presented in the way so that we can compare our work with others. In the case of pipelined design, a total number of operations per second also is not much significance. It should be 1/frequency in our case as each operation executes in a cycle ( section III/D, fig 15).
+2. If we see the reference 12, it shows that each pipeline stage time increases with an increase of priority bit size. It is true for synthesize tools (ISE) the frequency become lower if we increase the bit length. For example, keeping other design parameters same, the frequency for 4-bit priority data is lower than that of 24-bit priority data.  Because 24-bit priority data can synthesise 2^24 nodes and it allocates  2^24 memory cells each 24-bit width. On the other hand, in the case of 4-bit priority data,  it can synthesis 2^4 data.  It is the EDA tool which decides the frequency of the circuits of each memory with different bit length. This bit length is exactly same as the number of levels and its value can be assigned at beginning before the code is synthesized.
+3. The best way to analyze at application level effectiveness is to deploy the technique into a real application.
+Unfortunately, we did not have such scope. The performance is highly dependent on the input sequence of instructions as discussed in section III/E/2. The
 the performance of Table II and Table III is based on instruction (insert/delete) sequence generated randomly; the i.e average case is presented.
 
 Detailed Comments:
@@ -38,10 +44,9 @@ Regarding power consumption, we completely agree with you
 
 Reviewer 4:
 
-1. In the scope of the paper, our paper should belong to:   "Architecture and Networks: All aspects of high-performance hardware including the optimization and evaluation of processors and networks" catagory where there are several sub catagories, particularly, "Parallel and scalable system architecture".
+1. In the scope of the paper, our paper should belong to:   "Architecture and Networks: All aspects of high-performance hardware including the optimization and evaluation of processors and networks" category where there is several subcategories, particularly, "Parallel and scalable system architecture".
 2. 
 
 Detailed Comments:
-The two designs of references 2 and 12 are ASIC implementation without hole concern; and there is no LUT statistics here.
-
+The two designs of references 2 and 12 are ASIC implementation without the hole concern, and there is no LUT statistics here.
 
